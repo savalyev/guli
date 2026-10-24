@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffb3d1">
+<title>Прогулка? 🐱</title>
+<style>
+  :root{
+    --pink-1:#fff0f6; --pink-2:#ffd1e3; --pink-3:#ff9ec4;
+    --pink-4:#ff5c9d; --pink-5:#c2185b; --ink:#7a1f4b;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg,var(--pink-1),var(--pink-2) 55%,var(--pink-3));
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;overflow:hidden;
+  }
+
+  /* плавающие котики и сердечки на фоне */
+  .float{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .float span{
+    position:absolute;bottom:-60px;font-size:28px;opacity:.55;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    to{transform:translateY(-115dvh) rotate(25deg);opacity:0}
+  }
+
+  .card{
+    position:relative;z-index:1;width:100%;max-width:400px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:2px solid #fff;border-radius:32px;
+    padding:28px 22px 26px;text-align:center;
+    box-shadow:0 20px 50px rgba(194,24,91,.22);
+    animation:pop .7s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes pop{from{transform:scale(.7) translateY(30px);opacity:0}}
+
+  /* котик SVG */
+  .cat{width:150px;height:130px;margin:0 auto 6px;display:block;animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-6px) rotate(-2deg)}}
+  .tail{transform-origin:150px 105px;animation:wag 1.2s ease-in-out infinite}
+  @keyframes wag{50%{transform:rotate(14deg)}}
+  .eye{transform-origin:center;transform-box:fill-box;animation:blink 4s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+
+  h1{font-size:28px;line-height:1.2;margin:8px 0 8px;color:var(--pink-5)}
+  p{margin:0 0 20px;font-size:17px;line-height:1.45}
+
+  .btns{display:flex;gap:14px;justify-content:center;align-items:center;min-height:64px}
+  button{
+    font:inherit;font-weight:700;border:none;cursor:pointer;
+    border-radius:999px;padding:14px 26px;font-size:18px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  #yes{
+    background:linear-gradient(135deg,var(--pink-4),#ff2e83);color:#fff;
+    box-shadow:0 8px 20px rgba(255,46,131,.45);
+  }
+  #yes:active{transform:scale(.95)}
+  #no{background:#fff;color:var(--pink-5);border:2px solid var(--pink-3)}
+
+  .hidden{display:none!important}
+
+  /* второй экран */
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px}
+  .opt{
+    background:#fff;color:var(--ink);border:2px solid var(--pink-2);
+    padding:12px 8px;font-size:15px;border-radius:18px;font-weight:600;
+  }
+  .opt.sel{background:var(--pink-4);color:#fff;border-color:var(--pink-4);transform:scale(1.04)}
+  input[type=datetime-local]{
+    width:100%;padding:12px 14px;border-radius:16px;border:2px solid var(--pink-2);
+    font:inherit;color:var(--ink);background:#fff;margin-bottom:18px;
+  }
+  #send{
+    width:100%;background:linear-gradient(135deg,var(--pink-4),#ff2e83);color:#fff;
+    box-shadow:0 8px 20px rgba(255,46,131,.4);
+  }
+  .small{font-size:13px;opacity:.7;margin-top:12px}
+</style>
+</head>
+<body>
+
+<div class="float" id="float"></div>
+
+<main class="card">
+
+  <!-- Экран 1 -->
+  <section id="s1">
+    <svg class="cat" viewBox="0 0 200 170" aria-hidden="true">
+      <g class="tail">
+        <path d="M150 110 C195 110 200 60 175 55" fill="none" stroke="#ffb3d1" stroke-width="14" stroke-linecap="round"/>
+      </g>
+      <ellipse cx="100" cy="125" rx="52" ry="38" fill="#ffc8de"/>
+      <path d="M52 62 L58 18 L88 46 Z" fill="#ffb3d1"/>
+      <path d="M148 62 L142 18 L112 46 Z" fill="#ffb3d1"/>
+      <path d="M60 50 L63 29 L77 44 Z" fill="#ff7eb0"/>
+      <path d="M140 50 L137 29 L123 44 Z" fill="#ff7eb0"/>
+      <ellipse cx="100" cy="80" rx="56" ry="48" fill="#ffc8de"/>
+      <ellipse class="eye" cx="78" cy="78" rx="7" ry="10" fill="#7a1f4b"/>
+      <ellipse class="eye" cx="122" cy="78" rx="7" ry="10" fill="#7a1f4b"/>
+      <circle cx="80" cy="74" r="2.5" fill="#fff"/>
+      <circle cx="124" cy="74" r="2.5" fill="#fff"/>
+      <ellipse cx="62" cy="96" rx="10" ry="6" fill="#ff9ec4" opacity=".7"/>
+      <ellipse cx="138" cy="96" rx="10" ry="6" fill="#ff9ec4" opacity=".7"/>
+      <path d="M94 92 L106 92 L100 100 Z" fill="#ff5c9d"/>
+      <path d="M100 100 Q94 110 86 104 M100 100 Q106 110 114 104" fill="none" stroke="#7a1f4b" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M30 88 L56 92 M30 102 L56 99 M170 88 L144 92 M170 102 L144 99" stroke="#c2185b" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+    </svg>
+
+    <h1 id="title">Пойдёшь со мной гулять? 🌸</h1>
+    <p>Погода хорошая, настроение тоже. Котики одобряют 🐾</p>
+
+    <div class="btns">
+      <button id="yes">Да! 💖</button>
+      <button id="no">Нет 🙈</button>
+    </div>
+  </section>
+
+  <!-- Экран 2 -->
+  <section id="s2" class="hidden">
+    <div style="font-size:64px">😻</div>
+    <h1>Ураа! Тогда выбери:</h1>
+    <p>Куда пойдём?</p>
+
+    <div class="opts" id="opts">
+      <button class="opt">🌳 Парк</button>
+      <button class="opt">☕ Кофе</button>
+      <button class="opt">🍦 Мороженое</button>
+      <button class="opt">🎬 Автомат с игрушками</button>
+    </div>
+
+    <input type="datetime-local" id="when">
+    <button id="send">Отправить ответ 💌</button>
+    <div class="small">Откроется Telegram с готовым сообщением</div>
+  </section>
+
+</main>
+
+<script>
+  // ====== НАСТРОЙКИ ======
+  const TG_USERNAME = "svvvlyxv"; // свой ник в Telegram, без @
+  const HER_NAME = "Шладость";                 // можно вписать имя, например "Аня"
+  // =======================
+
+  if (HER_NAME) document.getElementById('title').textContent = HER_NAME + ", пойдёшь со мной гулять? 🌸";
+
+  // фон: котики и сердечки
+  const floatBox = document.getElementById('float');
+  const icons = ['🐱','😸','🐾','💗','🌸','😻','💖','🐈'];
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('span');
+    s.textContent = icons[Math.floor(Math.random()*icons.length)];
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.fontSize = (20 + Math.random()*28) + 'px';
+    s.style.animationDuration = (9 + Math.random()*10) + 's';
+    s.style.animationDelay = (-Math.random()*15) + 's';
+    floatBox.appendChild(s);
+  }
+
+  // убегающая кнопка «Нет»
+  const no = document.getElementById('no');
+  const yes = document.getElementById('yes');
+  const phrases = ['Точно нет? 🥺','Ну пожалуйста 🐱','Котик грустит 😿','Подумай ещё 💭','Не-не-не 🙈','Ну давай! 🌸'];
+  let tries = 0;
+
+  function dodge(e){
+    e.preventDefault();
+    tries++;
+    no.style.position = 'fixed';
+    const pad = 12;
+    const x = pad + Math.random() * (window.innerWidth  - no.offsetWidth  - pad*2);
+    const y = pad + Math.random() * (window.innerHeight - no.offsetHeight - pad*2);
+    no.style.left = x + 'px';
+    no.style.top  = y + 'px';
+    no.style.zIndex = 5;
+    no.textContent = phrases[tries % phrases.length];
+    yes.style.transform = 'scale(' + Math.min(1 + tries*0.1, 1.6) + ')';
+  }
+  no.addEventListener('pointerenter', dodge);
+  no.addEventListener('touchstart', dodge, {passive:false});
+  no.addEventListener('click', dodge);
+
+  // «Да»
+  yes.addEventListener('click', () => {
+    document.getElementById('s1').classList.add('hidden');
+    document.getElementById('s2').classList.remove('hidden');
+    no.classList.add('hidden');
+    confetti();
+  });
+
+  // выбор места
+  let place = '';
+  document.querySelectorAll('.opt').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.opt').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+      place = b.textContent.trim();
+    });
+  });
+
+  // отправка в Telegram
+  document.getElementById('send').addEventListener('click', () => {
+    const when = document.getElementById('when').value;
+    let text = 'Я согласна погулять! 💖🐱';
+    if (place) text += '\nМесто: ' + place;
+    if (when)  text += '\nКогда: ' + new Date(when).toLocaleString('ru-RU',{dateStyle:'long',timeStyle:'short'});
+    window.location.href = 'https://t.me/' + TG_USERNAME + '?text=' + encodeURIComponent(text);
+  });
+
+  // конфетти из сердечек
+  function confetti(){
+    const em = ['💖','🌸','🐱','✨','💗','😻'];
+    for (let i = 0; i < 40; i++){
+      const el = document.createElement('div');
+      el.textContent = em[Math.floor(Math.random()*em.length)];
+      Object.assign(el.style,{
+        position:'fixed',left:Math.random()*100+'vw',top:'-30px',
+        fontSize:(18+Math.random()*22)+'px',zIndex:10,pointerEvents:'none',
+        transition:'transform 2.6s ease-in, opacity 2.6s',
+      });
+      document.body.appendChild(el);
+      requestAnimationFrame(()=>{
+        el.style.transform = `translate(${(Math.random()-.5)*160}px, ${window.innerHeight+80}px) rotate(${Math.random()*540}deg)`;
+        el.style.opacity = 0;
+      });
+      setTimeout(()=>el.remove(), 2800);
+    }
+  }
+</script>
+</body>
+</html>
